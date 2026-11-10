@@ -4,9 +4,9 @@ on:
   schedule:
     - cron: "40 0 * * *"   # 00:40 UTC = 08:40 Asia/Singapore. GitHub cron is UTC only and may start late by minutes.
   workflow_dispatch:        # Actions → collect → Run workflow: collect right now
-  push:                     # page / rule changes redeploy the site without spending SerpApi requests
+  push:                     # page / rule / data changes redeploy the site without spending SerpApi requests
     branches: [main]
-    paths: [index.html, settings.json, alerts.py, build_bundle.py, .github/workflows/collect.yml]
+    paths: [index.html, settings.json, alerts.py, build_bundle.py, .github/workflows/collect.yml, "data/**"]
 
 permissions:
   contents: write
