@@ -1,0 +1,13 @@
+{
+ "at": "2026-11-05T07:26:32Z",
+ "note": "5 months explore (Nov–Mar) + CAN CNY date grid + 10 destinations on Trip.com/Agoda, all extracted on first attempt; no steps skipped.",
+ "run": "2026-11-05T1526",
+ "sources": [
+  "google",
+  "trip",
+  "agoda"
+ ],
+ "status": "ok",
+ "origin": "SIN",
+ "currency": "SGD"
+}

@@ -1,0 +1,284 @@
+{
+ "at": "2026-11-04T15:22:29Z",
+ "label": "1-week trip in February",
+ "month": "2027-02",
+ "rows": [
+  [
+   "Shanghai",
+   "Feb 7 – 15, 2027",
+   342,
+   "1 stop",
+   "10 hr"
+  ],
+  [
+   "Hong Kong",
+   "Feb 26 – Mar 4, 2027",
+   359,
+   "Nonstop",
+   "4 hr 35 min"
+  ],
+  [
+   "Seoul",
+   "Feb 20 – Mar 1, 2027",
+   379,
+   "Nonstop",
+   "6 hr 15 min"
+  ],
+  [
+   "Tokyo",
+   "Feb 22 – Mar 3, 2027",
+   498,
+   "1 stop",
+   "6 hr 25 min"
+  ],
+  [
+   "Beijing",
+   "Feb 7 – 16, 2027",
+   367,
+   "1 stop",
+   "10 hr 40 min"
+  ],
+  [
+   "Hanoi",
+   "Feb 15 – 22, 2027",
+   248,
+   "Nonstop",
+   "3 hr 25 min"
+  ],
+  [
+   "Bangkok",
+   "Feb 15 – 24, 2027",
+   215,
+   "Nonstop",
+   "2 hr 35 min"
+  ],
+  [
+   "Ho Chi Minh City",
+   "Feb 15 – 22, 2027",
+   172,
+   "Nonstop",
+   "2 hr 15 min"
+  ],
+  [
+   "Mumbai",
+   "Feb 25 – Mar 3, 2027",
+   359,
+   "1 stop",
+   "5 hr 40 min"
+  ],
+  [
+   "New Delhi",
+   "Feb 22 – Mar 2, 2027",
+   393,
+   "Nonstop",
+   "6 hr"
+  ],
+  [
+   "Federal Territory of Kuala Lumpur",
+   "Feb 11 – 17, 2027",
+   123,
+   "Nonstop",
+   "1 hr 5 min"
+  ],
+  [
+   "Dubai",
+   "Feb 1 – 7, 2027",
+   663,
+   "1 stop",
+   "11 hr 35 min"
+  ],
+  [
+   "Chiang Mai",
+   "Feb 11 – 17, 2027",
+   310,
+   "Nonstop",
+   "3 hr 5 min"
+  ],
+  [
+   "Osaka",
+   "Feb 11 – 20, 2027",
+   567,
+   "1 stop",
+   "6 hr 20 min"
+  ],
+  [
+   "Phuket",
+   "Feb 27 – Mar 5, 2027",
+   174,
+   "Nonstop",
+   "2 hr 5 min"
+  ],
+  [
+   "Jaipur",
+   "Feb 7 – 16, 2027",
+   557,
+   "1 stop",
+   "16 hr 40 min"
+  ],
+  [
+   "Goa",
+   "Feb 14 – 23, 2027",
+   798,
+   "2 stops",
+   "13 hr"
+  ],
+  [
+   "Bengaluru",
+   "Feb 22 – Mar 1, 2027",
+   360,
+   "Nonstop",
+   "4 hr 40 min"
+  ],
+  [
+   "Abu Dhabi",
+   "Feb 1 – 7, 2027",
+   695,
+   "Nonstop",
+   "7 hr 35 min"
+  ],
+  [
+   "Taipei City",
+   "Feb 26 – Mar 4, 2027",
+   264,
+   "Nonstop",
+   "4 hr 50 min"
+  ],
+  [
+   "Chennai",
+   "Feb 14 – 20, 2027",
+   354,
+   "Nonstop",
+   "4 hr 5 min"
+  ],
+  [
+   "Varanasi",
+   "Feb 13 – 22, 2027",
+   514,
+   "1 stop",
+   "7 hr 40 min"
+  ],
+  [
+   "Ko Samui",
+   "Feb 26 – Mar 6, 2027",
+   374,
+   "Nonstop",
+   "1 hr 50 min"
+  ],
+  [
+   "Udaipur",
+   "Feb 1 – 7, 2027",
+   2773,
+   "2 stops",
+   "23 hr"
+  ],
+  [
+   "Kolkata",
+   "Feb 11 – 18, 2027",
+   414,
+   "Nonstop",
+   "4 hr 20 min"
+  ],
+  [
+   "Bahrain",
+   "Feb 4 – 11, 2027",
+   929,
+   "1 stop",
+   "11 hr 50 min"
+  ],
+  [
+   "Manila",
+   "Feb 11 – 19, 2027",
+   219,
+   "Nonstop",
+   "4 hr 5 min"
+  ],
+  [
+   "Kochi",
+   "Feb 18 – 25, 2027",
+   443,
+   "1 stop",
+   "4 hr 35 min"
+  ],
+  [
+   "Kathmandu",
+   "Feb 25 – Mar 3, 2027",
+   692,
+   "1 stop",
+   "9 hr 45 min"
+  ],
+  [
+   "Macao",
+   "Feb 26 – Mar 4, 2027",
+   391,
+   "1 stop",
+   "3 hr 55 min"
+  ],
+  [
+   "Hyderabad",
+   "Feb 8 – 17, 2027",
+   389,
+   "Nonstop",
+   "4 hr 40 min"
+  ],
+  [
+   "Da Nang",
+   "Feb 19 – 25, 2027",
+   246,
+   "1 stop",
+   "2 hr 45 min"
+  ],
+  [
+   "Jodhpur",
+   "Feb 13 – 19, 2027",
+   2613,
+   "2 stops",
+   "42 hr 35 min"
+  ],
+  [
+   "Krong Siem Reap",
+   "Feb 25 – Mar 3, 2027",
+   337,
+   "Nonstop",
+   "2 hr 20 min"
+  ],
+  [
+   "Colombo",
+   "Feb 18 – 26, 2027",
+   579,
+   "1 stop",
+   "5 hr 45 min"
+  ],
+  [
+   "Phnom Penh",
+   "Feb 4 – 10, 2027",
+   256,
+   "Nonstop",
+   "2 hr 5 min"
+  ],
+  [
+   "Hiroshima",
+   "Feb 25 – Mar 4, 2027",
+   623,
+   "1 stop",
+   "13 hr 5 min"
+  ],
+  [
+   "Phú Quốc",
+   "Feb 11 – 17, 2027",
+   219,
+   "1 stop",
+   "1 hr 40 min"
+  ],
+  [
+   "Ahmedabad",
+   "Feb 18 – 24, 2027",
+   484,
+   "1 stop",
+   "5 hr 40 min"
+  ]
+ ],
+ "run": "2026-11-04T2322",
+ "source": "google-explore",
+ "origin": "SIN",
+ "currency": "SGD"
+}

@@ -1,0 +1,18 @@
+{
+ "at": "2026-11-05T13:35:00Z",
+ "cells": [
+  [
+   "Feb 6",
+   "Feb 11",
+   404
+  ]
+ ],
+ "dest": "CAN",
+ "insight": "",
+ "priceHistory": null,
+ "run": "2026-11-05T2135",
+ "source": "serpapi-flights",
+ "window": "CNY 2027 (Feb 6)",
+ "origin": "SIN",
+ "currency": "SGD"
+}

@@ -1,0 +1,13 @@
+{
+ "at": "2026-11-04T15:22:29Z",
+ "note": "5 months explore (Nov–Mar), CAN CNY date grid (Date grid button clicked via JS since native click timed out), 10 destinations compared on Trip.com and Agoda; no steps skipped.",
+ "run": "2026-11-04T2322",
+ "sources": [
+  "google",
+  "trip",
+  "agoda"
+ ],
+ "status": "ok",
+ "origin": "SIN",
+ "currency": "SGD"
+}

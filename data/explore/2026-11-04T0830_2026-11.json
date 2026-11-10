@@ -1,0 +1,277 @@
+{
+ "at": "2026-11-04T08:30:00Z",
+ "label": "1-week trip in November",
+ "month": "2026-11",
+ "rows": [
+  [
+   "Tokyo",
+   "Nov 16 – 23",
+   506,
+   "1 stop",
+   "12 hr 45 min"
+  ],
+  [
+   "Seoul",
+   "Nov 16 – 23",
+   399,
+   "Nonstop",
+   "6 hr 15 min"
+  ],
+  [
+   "Osaka",
+   "Nov 23 – Dec 1",
+   514,
+   "Nonstop",
+   "6 hr 10 min"
+  ],
+  [
+   "Hong Kong",
+   "Nov 5 – 11",
+   502,
+   "1 stop",
+   "4 hr 35 min"
+  ],
+  [
+   "Bangkok",
+   "Nov 30 – Dec 9",
+   255,
+   "Nonstop",
+   "2 hr 35 min"
+  ],
+  [
+   "Shanghai",
+   "Nov 16 – 23",
+   307,
+   "Nonstop",
+   "5 hr 20 min"
+  ],
+  [
+   "Hanoi",
+   "Nov 9 – 18",
+   295,
+   "1 stop",
+   "5 hr 55 min"
+  ],
+  [
+   "Ho Chi Minh City",
+   "Nov 12 – 18",
+   221,
+   "Nonstop",
+   "2 hr 5 min"
+  ],
+  [
+   "Mumbai",
+   "Nov 9 – 18",
+   395,
+   "Nonstop",
+   "5 hr 35 min"
+  ],
+  [
+   "New Delhi",
+   "Nov 12 – 19",
+   481,
+   "Nonstop",
+   "6 hr"
+  ],
+  [
+   "Federal Territory of Kuala Lumpur",
+   "Nov 12 – 19",
+   123,
+   "Nonstop",
+   "1 hr 5 min"
+  ],
+  [
+   "Dubai",
+   "Nov 9 – 15",
+   657,
+   "1 stop",
+   "11 hr 35 min"
+  ],
+  [
+   "Chiang Mai",
+   "Nov 14 – 20",
+   326,
+   "Nonstop",
+   "3 hr 5 min"
+  ],
+  [
+   "Phuket",
+   "Nov 9 – 18",
+   173,
+   "Nonstop",
+   "2 hr 5 min"
+  ],
+  [
+   "Jaipur",
+   "Nov 9 – 18",
+   559,
+   "1 stop",
+   "14 hr 30 min"
+  ],
+  [
+   "Goa",
+   "Nov 12 – 18",
+   1216,
+   "2 stops",
+   "13 hr"
+  ],
+  [
+   "Beijing",
+   "Nov 12 – 20",
+   404,
+   "1 stop",
+   "9 hr 10 min"
+  ],
+  [
+   "Bengaluru",
+   "Nov 9 – 18",
+   362,
+   "Nonstop",
+   "4 hr 40 min"
+  ],
+  [
+   "Abu Dhabi",
+   "Nov 9 – 15",
+   748,
+   "1 stop",
+   "11 hr 55 min"
+  ],
+  [
+   "Chennai",
+   "Nov 12 – 19",
+   424,
+   "Nonstop",
+   "4 hr 10 min"
+  ],
+  [
+   "Varanasi",
+   "Nov 30 – Dec 8",
+   627,
+   "1 stop",
+   "7 hr 40 min"
+  ],
+  [
+   "Taipei City",
+   "Nov 12 – 18",
+   300,
+   "Nonstop",
+   "4 hr 40 min"
+  ],
+  [
+   "Ko Samui",
+   "Nov 8 – 14",
+   387,
+   "Nonstop",
+   "1 hr 55 min"
+  ],
+  [
+   "Kolkata",
+   "Nov 15 – 21",
+   397,
+   "Nonstop",
+   "4 hr 20 min"
+  ],
+  [
+   "Bahrain",
+   "Nov 23 – Dec 1",
+   1035,
+   "1 stop",
+   "11 hr 15 min"
+  ],
+  [
+   "Manila",
+   "Nov 27 – Dec 3",
+   369,
+   "Nonstop",
+   "3 hr 50 min"
+  ],
+  [
+   "Kochi",
+   "Nov 19 – 25",
+   702,
+   "1 stop",
+   "32 hr 5 min"
+  ],
+  [
+   "Kathmandu",
+   "Nov 27 – Dec 6",
+   1105,
+   "1 stop",
+   "9 hr 45 min"
+  ],
+  [
+   "Macao",
+   "Nov 9 – 18",
+   429,
+   "1 stop",
+   "3 hr 55 min"
+  ],
+  [
+   "Hyderabad",
+   "Nov 9 – 18",
+   399,
+   "Nonstop",
+   "4 hr 40 min"
+  ],
+  [
+   "Da Nang",
+   "Nov 15 – 21",
+   232,
+   "1 stop",
+   "2 hr 50 min"
+  ],
+  [
+   "Jodhpur",
+   "Nov 23 – Dec 1",
+   2843,
+   "2 stops",
+   "18 hr 50 min"
+  ],
+  [
+   "Krong Siem Reap",
+   "Nov 27 – Dec 3",
+   400,
+   "1 stop",
+   "2 hr 20 min"
+  ],
+  [
+   "Colombo",
+   "Nov 16 – 24",
+   546,
+   "1 stop",
+   "5 hr 45 min"
+  ],
+  [
+   "Phnom Penh",
+   "Nov 20 – 29",
+   266,
+   "Nonstop",
+   "2 hr 5 min"
+  ],
+  [
+   "Hiroshima",
+   "Nov 26 – Dec 5",
+   626,
+   "1 stop",
+   "13 hr 5 min"
+  ],
+  [
+   "Phú Quốc",
+   "Nov 15 – 21",
+   225,
+   "1 stop",
+   "1 hr 40 min"
+  ],
+  [
+   "Ahmedabad",
+   "Nov 6 – 13",
+   914,
+   "1 stop",
+   "16 hr 50 min"
+  ]
+ ],
+ "run": "2026-11-04T0830",
+ "source": "google-explore",
+ "origin": "SIN",
+ "currency": "SGD"
+}

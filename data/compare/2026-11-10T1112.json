@@ -1,0 +1,109 @@
+{
+ "at": "2026-11-10T03:12:34Z",
+ "items": [
+  {
+   "agoda": null,
+   "back": "2027-01-13",
+   "city": "Kuala Lumpur",
+   "code": "KUL",
+   "google": 121,
+   "out": "2027-01-07",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2026-12-09",
+   "city": "Phuket",
+   "code": "HKT",
+   "google": 173,
+   "out": "2026-11-30",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-02-02",
+   "city": "Ho Chi Minh City",
+   "code": "SGN",
+   "google": 183,
+   "out": "2027-01-25",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-02-16",
+   "city": "Manila",
+   "code": "MNL",
+   "google": 190,
+   "out": "2027-02-08",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-02-02",
+   "city": "Bangkok",
+   "code": "BKK",
+   "google": 215,
+   "out": "2027-01-25",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-02-18",
+   "city": "Phu Quoc",
+   "code": "PQC",
+   "google": 216,
+   "out": "2027-02-12",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-01-27",
+   "city": "Da Nang",
+   "code": "DAD",
+   "google": 218,
+   "out": "2027-01-18",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-03-05",
+   "city": "Cebu",
+   "code": "CEB",
+   "google": 247,
+   "out": "2027-02-25",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-01-22",
+   "city": "Hanoi",
+   "code": "HAN",
+   "google": 261,
+   "out": "2027-01-14",
+   "trip": null,
+   "tripAlert": null
+  },
+  {
+   "agoda": null,
+   "back": "2027-02-11",
+   "city": "Guangzhou (CNY)",
+   "code": "CAN",
+   "google": 423,
+   "out": "2027-02-06",
+   "trip": null,
+   "tripAlert": null
+  }
+ ],
+ "run": "2026-11-10T1112",
+ "source": "serpapi",
+ "origin": "SIN",
+ "currency": "SGD"
+}

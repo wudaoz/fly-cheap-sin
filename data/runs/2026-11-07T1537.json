@@ -1,0 +1,11 @@
+{
+ "at": "2026-11-07T07:37:52Z",
+ "note": "explore 2027-02 empty",
+ "run": "2026-11-07T1537",
+ "sources": [
+  "google(serpapi)"
+ ],
+ "status": "partial",
+ "origin": "SIN",
+ "currency": "SGD"
+}

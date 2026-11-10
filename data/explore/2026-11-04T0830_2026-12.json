@@ -1,0 +1,284 @@
+{
+ "at": "2026-11-04T08:30:00Z",
+ "label": "1-week trip in December",
+ "month": "2026-12",
+ "rows": [
+  [
+   "Tokyo",
+   "Dec 3 – 9",
+   515,
+   "1 stop",
+   "22 hr 35 min"
+  ],
+  [
+   "Shanghai",
+   "Dec 28, 2026 – Jan 6, 2027",
+   318,
+   "1 stop",
+   "5 hr 15 min"
+  ],
+  [
+   "Hong Kong",
+   "Dec 31, 2026 – Jan 6, 2027",
+   395,
+   "Nonstop",
+   "4 hr 35 min"
+  ],
+  [
+   "Seoul",
+   "Dec 4 – 12",
+   478,
+   "1 stop",
+   "9 hr 45 min"
+  ],
+  [
+   "Osaka",
+   "Dec 31, 2026 – Jan 9, 2027",
+   502,
+   "1 stop",
+   "6 hr 20 min"
+  ],
+  [
+   "Bangkok",
+   "Dec 31, 2026 – Jan 8, 2027",
+   265,
+   "Nonstop",
+   "2 hr 35 min"
+  ],
+  [
+   "Beijing",
+   "Dec 31, 2026 – Jan 7, 2027",
+   384,
+   "1 stop",
+   "9 hr"
+  ],
+  [
+   "Phuket",
+   "Dec 6 – 15",
+   209,
+   "Nonstop",
+   "2 hr"
+  ],
+  [
+   "Hanoi",
+   "Dec 31, 2026 – Jan 6, 2027",
+   329,
+   "Nonstop",
+   "3 hr 30 min"
+  ],
+  [
+   "Ho Chi Minh City",
+   "Dec 31, 2026 – Jan 7, 2027",
+   219,
+   "Nonstop",
+   "2 hr 5 min"
+  ],
+  [
+   "Mumbai",
+   "Dec 3 – 11",
+   572,
+   "Nonstop",
+   "5 hr 40 min"
+  ],
+  [
+   "New Delhi",
+   "Dec 27, 2026 – Jan 4, 2027",
+   532,
+   "Nonstop",
+   "6 hr"
+  ],
+  [
+   "Federal Territory of Kuala Lumpur",
+   "Dec 3 – 9",
+   144,
+   "Nonstop",
+   "1 hr 5 min"
+  ],
+  [
+   "Dubai",
+   "Dec 27, 2026 – Jan 5, 2027",
+   657,
+   "1 stop",
+   "11 hr 45 min"
+  ],
+  [
+   "Chiang Mai",
+   "Dec 4 – 10",
+   461,
+   "1 stop",
+   "5 hr 20 min"
+  ],
+  [
+   "Jaipur",
+   "Dec 11 – 17",
+   764,
+   "1 stop",
+   "9 hr 40 min"
+  ],
+  [
+   "Goa",
+   "Dec 6 – 12",
+   1519,
+   "2 stops",
+   "16 hr 35 min"
+  ],
+  [
+   "Bengaluru",
+   "Dec 3 – 9",
+   573,
+   "Nonstop",
+   "4 hr 40 min"
+  ],
+  [
+   "Abu Dhabi",
+   "Dec 27, 2026 – Jan 5, 2027",
+   698,
+   "Nonstop",
+   "7 hr 35 min"
+  ],
+  [
+   "Taipei City",
+   "Dec 28, 2026 – Jan 6, 2027",
+   351,
+   "1 stop",
+   "4 hr 50 min"
+  ],
+  [
+   "Chennai",
+   "Dec 28, 2026 – Jan 6, 2027",
+   473,
+   "1 stop",
+   "4 hr 5 min"
+  ],
+  [
+   "Varanasi",
+   "Dec 27, 2026 – Jan 5, 2027",
+   723,
+   "1 stop",
+   "7 hr 40 min"
+  ],
+  [
+   "Ko Samui",
+   "Dec 3 – 10",
+   352,
+   "Nonstop",
+   "1 hr 50 min"
+  ],
+  [
+   "Udaipur",
+   "Dec 31, 2026 – Jan 7, 2027",
+   2568,
+   "2 stops",
+   "19 hr 5 min"
+  ],
+  [
+   "Kolkata",
+   "Dec 31, 2026 – Jan 8, 2027",
+   467,
+   "1 stop",
+   "4 hr 20 min"
+  ],
+  [
+   "Bahrain",
+   "Dec 27, 2026 – Jan 5, 2027",
+   849,
+   "1 stop",
+   "11 hr 50 min"
+  ],
+  [
+   "Manila",
+   "Dec 3 – 11",
+   431,
+   "Nonstop",
+   "3 hr 40 min"
+  ],
+  [
+   "Kochi",
+   "Dec 6 – 12",
+   722,
+   "1 stop",
+   "7 hr 45 min"
+  ],
+  [
+   "Kathmandu",
+   "Dec 27, 2026 – Jan 5, 2027",
+   756,
+   "1 stop",
+   "9 hr 45 min"
+  ],
+  [
+   "Macao",
+   "Dec 31, 2026 – Jan 6, 2027",
+   390,
+   "1 stop",
+   "3 hr 55 min"
+  ],
+  [
+   "Hyderabad",
+   "Dec 25 – 31",
+   603,
+   "1 stop",
+   "7 hr 10 min"
+  ],
+  [
+   "Da Nang",
+   "Dec 28, 2026 – Jan 6, 2027",
+   251,
+   "1 stop",
+   "2 hr 45 min"
+  ],
+  [
+   "Jodhpur",
+   "Dec 28, 2026 – Jan 6, 2027",
+   2606,
+   "2 stops",
+   "18 hr 50 min"
+  ],
+  [
+   "Krong Siem Reap",
+   "Dec 14 – 22",
+   355,
+   "Nonstop",
+   "2 hr 20 min"
+  ],
+  [
+   "Colombo",
+   "Dec 7 – 14",
+   626,
+   "1 stop",
+   "5 hr 45 min"
+  ],
+  [
+   "Phnom Penh",
+   "Dec 31, 2026 – Jan 6, 2027",
+   255,
+   "Nonstop",
+   "2 hr 5 min"
+  ],
+  [
+   "Hiroshima",
+   "Dec 28, 2026 – Jan 5, 2027",
+   623,
+   "1 stop",
+   "13 hr 5 min"
+  ],
+  [
+   "Phú Quốc",
+   "Dec 31, 2026 – Jan 7, 2027",
+   247,
+   "1 stop",
+   "1 hr 40 min"
+  ],
+  [
+   "Ahmedabad",
+   "Dec 12 – 19",
+   660,
+   "1 stop",
+   "8 hr 30 min"
+  ]
+ ],
+ "run": "2026-11-04T0830",
+ "source": "google-explore",
+ "origin": "SIN",
+ "currency": "SGD"
+}

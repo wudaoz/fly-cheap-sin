@@ -1,0 +1,292 @@
+{
+ "at": "2026-11-05T12:41:17Z",
+ "label": "1-week trip in the next 6 months",
+ "month": "next-6-months",
+ "region": "Europe",
+ "rows": [
+  [
+   "London",
+   "Nov 16 – 23",
+   815,
+   "1 stop",
+   "25 hr 5 min"
+  ],
+  [
+   "Athens",
+   "Feb 19 – 26, 2027",
+   638,
+   "Nonstop",
+   "11 hr 55 min"
+  ],
+  [
+   "Lisbon",
+   "Nov 15 – 22",
+   894,
+   "1 stop",
+   "19 hr 30 min"
+  ],
+  [
+   "Edinburgh",
+   "Nov 15 – 23",
+   941,
+   "1 stop",
+   "31 hr 15 min"
+  ],
+  [
+   "Paris",
+   "Nov 16 – 25",
+   777,
+   "1 stop",
+   "17 hr 20 min"
+  ],
+  [
+   "Dublin",
+   "Nov 12 – 18",
+   817,
+   "1 stop",
+   "19 hr 5 min"
+  ],
+  [
+   "Amsterdam",
+   "Nov 22 – Dec 1",
+   891,
+   "1 stop",
+   "17 hr 35 min"
+  ],
+  [
+   "Rome",
+   "Nov 15 – 21",
+   735,
+   "1 stop",
+   "17 hr 5 min"
+  ],
+  [
+   "Barcelona",
+   "Nov 12 – 19",
+   727,
+   "1 stop",
+   "18 hr 30 min"
+  ],
+  [
+   "Venice",
+   "Nov 16 – 25",
+   784,
+   "1 stop",
+   "27 hr 55 min"
+  ],
+  [
+   "Berlin",
+   "Nov 15 – 23",
+   839,
+   "1 stop",
+   "18 hr 25 min"
+  ],
+  [
+   "Florence",
+   "Nov 12 – 19",
+   939,
+   "3 stops",
+   "22 hr 2 min"
+  ],
+  [
+   "Prague",
+   "Nov 15 – 21",
+   955,
+   "1 stop",
+   "18 hr 15 min"
+  ],
+  [
+   "Malta",
+   "Nov 22 – 30",
+   1085,
+   "1 stop",
+   "29 hr 5 min"
+  ],
+  [
+   "Madrid",
+   "Dec 4 – 10",
+   769,
+   "1 stop",
+   "21 hr 10 min"
+  ],
+  [
+   "Vienna",
+   "Nov 15 – 24",
+   724,
+   "Nonstop",
+   "12 hr 45 min"
+  ],
+  [
+   "Budapest",
+   "Nov 15 – 23",
+   874,
+   "1 stop",
+   "26 hr 55 min"
+  ],
+  [
+   "Santorini",
+   "Nov 23 – 30",
+   1069,
+   "2 stops",
+   "28 hr"
+  ],
+  [
+   "Copenhagen",
+   "Nov 12 – 19",
+   898,
+   "1 stop",
+   "18 hr 20 min"
+  ],
+  [
+   "Milan",
+   "Nov 12 – 19",
+   724,
+   "1 stop",
+   "18 hr 35 min"
+  ],
+  [
+   "Dubrovnik",
+   "Nov 15 – 23",
+   1238,
+   "2 stops",
+   "26 hr 25 min"
+  ],
+  [
+   "Munich",
+   "Nov 16 – 25",
+   728,
+   "1 stop",
+   "17 hr"
+  ],
+  [
+   "Stockholm",
+   "Nov 19 – 28",
+   923,
+   "2 stops",
+   "22 hr 55 min"
+  ],
+  [
+   "Porto",
+   "Nov 23 – Dec 1",
+   956,
+   "1 stop",
+   "19 hr 45 min"
+  ],
+  [
+   "Seville",
+   "Feb 4 – 13, 2027",
+   979,
+   "1 stop",
+   "37 hr 10 min"
+  ],
+  [
+   "Mykonos",
+   "Nov 21 – 28",
+   1216,
+   "2 stops",
+   "26 hr 20 min"
+  ],
+  [
+   "Manchester",
+   "Nov 22 – 30",
+   903,
+   "1 stop",
+   "19 hr"
+  ],
+  [
+   "Zürich",
+   "Nov 16 – 24",
+   725,
+   "1 stop",
+   "17 hr 45 min"
+  ],
+  [
+   "Naples",
+   "Dec 3 – 9",
+   827,
+   "1 stop",
+   "15 hr 10 min"
+  ],
+  [
+   "Reykjavík",
+   "Feb 8 – 16, 2027",
+   1080,
+   "2 stops",
+   "26 hr 45 min"
+  ],
+  [
+   "Glasgow",
+   "Jan 30 – Feb 6, 2027",
+   1225,
+   "1 stop",
+   "17 hr 45 min"
+  ],
+  [
+   "Bordeaux",
+   "Nov 16 – 22",
+   880,
+   "1 stop",
+   "29 hr 50 min"
+  ],
+  [
+   "València",
+   "Nov 16 – 23",
+   847,
+   "1 stop",
+   "30 hr 15 min"
+  ],
+  [
+   "Oslo",
+   "Nov 23 – 30",
+   948,
+   "1 stop",
+   "29 hr 50 min"
+  ],
+  [
+   "Kraków",
+   "Nov 16 – 23",
+   858,
+   "1 stop",
+   "27 hr 40 min"
+  ],
+  [
+   "Nice",
+   "Nov 16 – 23",
+   833,
+   "1 stop",
+   "29 hr 20 min"
+  ],
+  [
+   "Helsinki",
+   "Feb 14 – 23, 2027",
+   872,
+   "1 stop",
+   "30 hr 35 min"
+  ],
+  [
+   "Hamburg",
+   "Nov 16 – 23",
+   847,
+   "1 stop",
+   "17 hr 25 min"
+  ],
+  [
+   "Salzburg",
+   "Nov 15 – 21",
+   886,
+   "1 stop",
+   "26 hr"
+  ],
+  [
+   "Belfast",
+   "Nov 26 – Dec 2",
+   1333,
+   "1 stop",
+   "21 hr 30 min"
+  ]
+ ],
+ "run": "2026-11-05T2041",
+ "source": "google-explore",
+ "origin": "SIN",
+ "currency": "SGD"
+}

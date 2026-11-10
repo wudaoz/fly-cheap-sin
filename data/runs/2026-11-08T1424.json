@@ -1,0 +1,11 @@
+{
+ "at": "2026-11-08T06:24:31Z",
+ "note": "5 months + Europe 47 cities + CAN via SerpApi; Trip/Agoda not collected",
+ "run": "2026-11-08T1424",
+ "sources": [
+  "google(serpapi)"
+ ],
+ "status": "ok",
+ "origin": "SIN",
+ "currency": "SGD"
+}

@@ -1,0 +1,13 @@
+{
+ "at": "2026-11-04T08:30:00Z",
+ "note": "首次采集（手动）",
+ "run": "2026-11-04T0830",
+ "sources": [
+  "google",
+  "trip",
+  "agoda"
+ ],
+ "status": "ok",
+ "origin": "SIN",
+ "currency": "SGD"
+}
