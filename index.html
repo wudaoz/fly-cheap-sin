@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>飞哪儿便宜</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 飞哪儿便宜 dashboard — static page, reads data/bundle.json produced by build_bundle.py. Layout: summary strip, price board, month heatmap, CNY fare, trend chart, alerts, notes. */
+:root{
+  --bg:#f5f7fa; --panel:#ffffff; --panel2:#eef2f7; --fg:#141922; --fg2:#525c6b; --muted:#8a93a1; --line:#e2e7ee; --line2:#cfd6df;
+  --accent:#2f4bd9; --accent-soft:#e6eafc; --accent-ink:#ffffff;
+  --good:#0ca30c; --good-ink:#006300; --warn:#fab219; --warn-ink:#7a5200; --serious:#ec835a; --serious-ink:#9a3d17; --crit:#d03b3b; --crit-ink:#a52424;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --grid:#e1e0d9; --axis:#c3c2b7;
+  --ramp1:#cde2fb; --ramp2:#9ec5f4; --ramp3:#6da7ec; --ramp4:#3987e5; --ramp5:#256abf; --ramp6:#184f95; --ramp7:#0d366b;
+  --font-ui:"Noto Sans SC",system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --font-data:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0e1116; --panel:#171b22; --panel2:#1f242d; --fg:#eef1f5; --fg2:#b8c0cb; --muted:#8a93a1; --line:#283039; --line2:#39424d;
+  --accent:#8b99ff; --accent-soft:#232a4a; --accent-ink:#0e1116;
+  --good:#0ca30c; --good-ink:#5fd35f; --warn:#fab219; --warn-ink:#fcc95a; --serious:#ec835a; --serious-ink:#f3a685; --crit:#d03b3b; --crit-ink:#ee7a7a;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --grid:#2c2c2a; --axis:#383835;
+  --ramp1:#163a6b; --ramp2:#184f95; --ramp3:#256abf; --ramp4:#3987e5; --ramp5:#5598e7; --ramp6:#86b6ef; --ramp7:#b7d3f6;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0e1116; --panel:#171b22; --panel2:#1f242d; --fg:#eef1f5; --fg2:#b8c0cb; --muted:#8a93a1; --line:#283039; --line2:#39424d;
+  --accent:#8b99ff; --accent-soft:#232a4a; --accent-ink:#0e1116;
+  --good:#0ca30c; --good-ink:#5fd35f; --warn:#fab219; --warn-ink:#fcc95a; --serious:#ec835a; --serious-ink:#f3a685; --crit:#d03b3b; --crit-ink:#ee7a7a;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --grid:#2c2c2a; --axis:#383835;
+  --ramp1:#163a6b; --ramp2:#184f95; --ramp3:#256abf; --ramp4:#3987e5; --ramp5:#5598e7; --ramp6:#86b6ef; --ramp7:#b7d3f6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-ui);font-size:14px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700}
+h1{font-size:26px;letter-spacing:-.01em}
+h2{font-size:16px}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.mono{font-family:var(--font-data);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.sub{color:var(--fg2)}
+a{color:var(--accent)}
+header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+.hdr-meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--fg2)}
+.hdr-meta b{font-weight:500;color:var(--fg)}
+.status-note{font-size:12px;color:var(--fg2);padding:8px 12px;border:1px dashed var(--line2);border-radius:8px}
+.status-note[hidden]{display:none}
+section.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.sec-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.sec-head p{margin:0;font-size:12px;color:var(--fg2)}
+/* picks */
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.pick{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--panel2)}
+.pick .city{font-size:17px;font-weight:700}
+.pick .price{font-size:28px;font-weight:600;font-family:var(--font-data);line-height:1.1}
+.pick .price small{font-size:12px;font-weight:400;color:var(--fg2);font-family:var(--font-ui);margin-left:4px}
+.pick .when{font-size:12px;color:var(--fg2)}
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap;border:1px solid transparent}
+.pill .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.pill.buy{color:var(--good-ink);border-color:var(--good)} .pill.buy .dot{background:var(--good)}
+.pill.good{color:var(--good-ink);border-color:var(--good);border-style:dashed} .pill.good .dot{background:var(--good)}
+.pill.watch{color:var(--warn-ink);border-color:var(--warn)} .pill.watch .dot{background:var(--warn)}
+.pill.wait{color:var(--serious-ink);border-color:var(--serious)} .pill.wait .dot{background:var(--serious)}
+.pill.na{color:var(--muted);border-color:var(--line2)} .pill.na .dot{background:var(--line2)}
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line2);background:transparent;color:var(--fg2);border-radius:999px;padding:3px 11px;font-size:12px;cursor:pointer;font-family:inherit}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip:focus-visible,button:focus-visible,input:focus-visible,tr.row:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* table */
+.tablewrap{overflow-x:auto;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font-size:11px;font-weight:500;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.03em}
+td{padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--font-data);font-variant-numeric:tabular-nums}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--panel2)}
+tr.row[aria-selected="true"] td{background:var(--accent-soft)}
+td .city{font-weight:700}
+td .code{color:var(--muted);font-size:11px;margin-left:5px;font-family:var(--font-data)}
+.src{font-size:10px;color:var(--muted);margin-left:4px;font-family:var(--font-ui)}
+.best{font-weight:600}
+.spark{width:84px;height:24px;display:block}
+input.th{width:64px;font:inherit;font-family:var(--font-data);font-size:12px;padding:2px 6px;border:1px solid var(--line2);border-radius:6px;background:var(--panel);color:var(--fg);text-align:right}
+input.th:disabled{border-color:transparent;background:transparent;color:var(--fg2)}
+.delta{font-size:11px;margin-left:4px}
+.delta.down{color:var(--good-ink)} .delta.up{color:var(--crit-ink)}
+/* heat */
+.heat td{padding:0;border:0}
+.heat .cell{display:block;margin:2px;padding:8px 6px;border-radius:6px;text-align:center;font-family:var(--font-data);font-size:12px;font-variant-numeric:tabular-nums;min-width:70px;background:var(--panel2);color:var(--fg);position:relative}
+.heat .cell.l1{background:var(--ramp1)} .heat .cell.l2{background:var(--ramp2)} .heat .cell.l3{background:var(--ramp3);color:#fff} .heat .cell.l4{background:var(--ramp4);color:#fff} .heat .cell.l5{background:var(--ramp5);color:#fff} .heat .cell.l6{background:var(--ramp6);color:#fff} .heat .cell.l7{background:var(--ramp7);color:#fff}
+:root[data-theme="dark"] .heat .cell.l1,:root[data-theme="dark"] .heat .cell.l2,:root[data-theme="dark"] .heat .cell.l3{color:#fff}
+:root[data-theme="dark"] .heat .cell.l6,:root[data-theme="dark"] .heat .cell.l7{color:#0b0b0b}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .heat .cell.l1,:root:not([data-theme="light"]) .heat .cell.l2,:root:not([data-theme="light"]) .heat .cell.l3{color:#fff} :root:not([data-theme="light"]) .heat .cell.l6,:root:not([data-theme="light"]) .heat .cell.l7{color:#0b0b0b}}
+.heat .cell.min{box-shadow:inset 0 0 0 2px var(--fg)}
+.heat .cell small{display:block;font-size:10px;opacity:.8;font-family:var(--font-ui)}
+.heat th.rowh{text-align:left;font-size:13px;color:var(--fg);font-weight:500;padding:6px 8px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:11px;color:var(--fg2);margin-top:10px}
+.legend .sw{display:inline-block;width:14px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:3px}
+.legend .sw.s1{background:var(--s1)} .legend .sw.s2{background:var(--s2)} .legend .sw.s3{background:var(--s3)}
+.legend .sw.l1{background:var(--ramp1)} .legend .sw.l4{background:var(--ramp4)} .legend .sw.l7{background:var(--ramp7)}
+/* CNY grid */
+.cny-grid{display:grid;grid-template-columns:auto repeat(7,1fr);gap:3px;font-family:var(--font-data);font-size:12px;font-variant-numeric:tabular-nums;max-width:720px}
+.cny-grid .h{font-family:var(--font-ui);font-size:11px;color:var(--muted);text-align:center;padding:4px 2px}
+.cny-grid .rh{font-family:var(--font-ui);font-size:11px;color:var(--muted);padding:4px 6px;text-align:right;align-self:center}
+.cny-grid .c{padding:7px 2px;border-radius:5px;text-align:center;background:var(--panel2)}
+.cny-grid .c.l1{background:var(--ramp1)} .cny-grid .c.l2{background:var(--ramp2)} .cny-grid .c.l3{background:var(--ramp3);color:#fff} .cny-grid .c.l4{background:var(--ramp4);color:#fff} .cny-grid .c.l5{background:var(--ramp5);color:#fff} .cny-grid .c.l6{background:var(--ramp6);color:#fff} .cny-grid .c.l7{background:var(--ramp7);color:#fff}
+.cny-grid .c.min{box-shadow:inset 0 0 0 2px var(--fg)}
+.cny-side{display:flex;flex-wrap:wrap;gap:16px 28px;margin-bottom:12px}
+.kv{display:flex;flex-direction:column;gap:2px}
+.kv .k{font-size:11px;color:var(--muted)} .kv .v{font-size:18px;font-family:var(--font-data);font-weight:600}
+.kv .v small{font-size:11px;font-family:var(--font-ui);font-weight:400;color:var(--fg2);margin-left:3px}
+/* chart */
+.chartbox{position:relative;min-width:0}
+.chart{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:6px 9px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.12);white-space:nowrap;z-index:2}
+.tip[hidden]{display:none}
+.tip b{font-family:var(--font-data)}
+/* settings */
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 28px}
+.settings-grid p{margin:0 0 6px;font-size:13px;color:var(--fg2)}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:13px}
+.alerts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.alerts li{display:flex;gap:10px;align-items:baseline}
+.alerts time{font-family:var(--font-data);font-size:11px;color:var(--muted);flex:none}
+.empty{padding:28px 12px;text-align:center;color:var(--fg2);font-size:13px;border:1px dashed var(--line2);border-radius:10px}
+.btn{font:inherit;font-size:12px;padding:5px 12px;border-radius:8px;border:1px solid var(--line2);background:var(--panel);color:var(--fg);cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.saved{font-size:12px;color:var(--good-ink)}
+@media (max-width:600px){ h1{font-size:22px} section.panel{padding:14px 12px} .pick .price{font-size:24px} }
+@media (prefers-reduced-motion:no-preference){ .pill,.chip{transition:background .15s,color .15s} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow" id="eyebrow">往返经济舱 · 1 人</div>
+      <h1>飞哪儿便宜</h1>
+    </div>
+    <div class="hdr-meta">
+      <span>最近采集 <b id="lastRun" class="mono">—</b></span>
+      <span>已采集 <b id="runCount" class="mono">0</b> 次</span>
+      <span>数据源 <b>Google Flights（经 SerpApi）</b></span>
+      <span>自动采集 <b>每天 08:40</b>（GitHub Actions）</span>
+    </div>
+  </header>
+
+  <div class="status-note" id="note" hidden></div>
+
+  <section class="panel" id="picksSec">
+    <div class="sec-head"><h2>现在最值得入手</h2><p>按 Google 最低价排序，建议综合了你的心理价位和历史走势</p></div>
+    <div class="picks" id="picks"><div class="empty">还没有采集到价格。第一次采集完成后，这里会显示最便宜的 3 个目的地。</div></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head">
+      <h2>目的地价格板</h2>
+      <div class="chips" role="group" aria-label="地区筛选">
+        <button class="chip" data-region="SEA" aria-pressed="true">东南亚</button>
+        <button class="chip" data-region="EA" aria-pressed="false">东亚</button>
+        <button class="chip" data-region="SA" aria-pressed="false">南亚 · 中东</button>
+        <button class="chip" data-region="EU" aria-pressed="false">欧洲</button>
+        <button class="chip" data-region="ALL" aria-pressed="false">全部</button>
+      </div>
+    </div>
+    <p class="sub" style="margin:0 0 10px;font-size:12px">「Google」是未来 <span id="windowDays">4 个月</span>内一周往返的最低价（欧洲按「未来 6 个月」整体最低价），箭头是和上一次采集的差。点一行可以在下面看它的价格走势。心理价位在仓库的 <code>settings.json</code> 里改。</p>
+    <div class="tablewrap">
+      <table id="board">
+        <thead><tr>
+          <th>目的地</th><th class="num">Google</th><th>最便宜的日期</th><th>走势</th><th class="num">相对历史</th><th>建议</th><th class="num">心理价位</th>
+        </tr></thead>
+        <tbody id="boardBody"><tr><td colspan="7"><div class="empty">等待第一次采集</div></td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>哪个月最便宜</h2><p>Google Flights 按月扫描：每个目的地在该月的最低一周往返价，黑框是该行最便宜的月份</p></div>
+    <div class="tablewrap"><table class="heat" id="heat"><tbody><tr><td><div class="empty">等待第一次采集</div></td></tr></tbody></table></div>
+    <div class="legend"><span><i class="sw l1"></i>便宜</span><span><i class="sw l4"></i>中等</span><span><i class="sw l7"></i>贵</span><span class="muted">价格带：≤140 · 180 · 220 · 270 · 350 · 450 · >450</span></div>
+  </section>
+
+  <section class="panel" id="fixedSec" hidden>
+    <div class="sec-head"><h2 id="fixedTitle">固定日期航线</h2><p id="fixedDesc"></p></div>
+    <div class="cny-side" id="cnySide"></div>
+    <div class="cny-grid" id="cnyGrid"></div>
+    <div class="legend" id="cnyNote"></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2 id="trendTitle">价格走势</h2><p>每次采集记录一次。采集 4 次以上后，「相对历史」和「建议」会开始参考走势</p></div>
+    <div class="chartbox" id="chartbox"><div class="empty">点上面的某个目的地查看走势</div><div class="tip" id="tip" hidden></div></div>
+    <div class="legend" id="trendLegend"></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>最近的提醒</h2><p>自动采集发现低于心理价位、创新低或比上次降 10% 以上时记在这里（规则在 alerts.py）</p></div>
+    <ul class="alerts" id="alerts"><li class="muted">还没有提醒</li></ul>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>判断逻辑与说明</h2></div>
+    <div class="settings-grid">
+      <div>
+        <p><b>建议是怎么来的</b></p>
+        <div class="rule">
+          <span class="pill buy"><i class="dot"></i>值得入手</span><span>低于你的心理价位，或是我们记录以来的最低价</span>
+          <span class="pill good"><i class="dot"></i>偏低</span><span>处在历史价格最低的 25%，或已接近心理价位</span>
+          <span class="pill watch"><i class="dot"></i>观望</span><span>在历史中位数附近；或采集次数还不到 4 次，暂无走势可参考</span>
+          <span class="pill wait"><i class="dot"></i>等等</span><span>高于历史 60% 分位，这条航线最近偏贵</span>
+        </div>
+      </div>
+      <div>
+        <p><b>关于价格</b></p>
+        <p>Google 的价格来自航司运价，通常只含随身行李，实际下单价以航司或代理网站为准。</p>
+        <p><b>覆盖范围</b></p>
+        <p>每天由 GitHub Actions 通过 SerpApi 读取 Google Flights Explore：未来几个月每月一次「出发地 → 所有目的地」的最低价扫描（约 60 个目的地），一次「出发地 → 欧洲，未来 6 个月」的扫描（约 40 个城市），可选再查一条固定日期航线的具体报价。每天的请求次数 = 月份数 + 1 + 1，默认 7 次，在 SerpApi 免费额度内。出发地、币种、月份数、固定航线和心理价位都在 settings.json 里改；欧洲的心理价位默认 720，雅典 600、维也纳/米兰/苏黎世/巴塞罗那/慕尼黑/罗马 680，巴黎/马德里 720，伦敦/阿姆斯特丹 780。</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+'use strict';
+// ---------- constants ----------
+const CITIES = {
+  'Federal Territory of Kuala Lumpur':['KUL','吉隆坡','SEA'],'Kuala Lumpur':['KUL','吉隆坡','SEA'],'Bangkok':['BKK','曼谷','SEA'],'Ho Chi Minh City':['SGN','胡志明市','SEA'],
+  'Phuket':['HKT','普吉岛','SEA'],'Hanoi':['HAN','河内','SEA'],'Manila':['MNL','马尼拉','SEA'],'Da Nang':['DAD','岘港','SEA'],'Phú Quốc':['PQC','富国岛','SEA'],'Phu Quoc':['PQC','富国岛','SEA'],
+  'Phnom Penh':['PNH','金边','SEA'],'Krong Siem Reap':['REP','暹粒','SEA'],'Chiang Mai':['CNX','清迈','SEA'],'Ko Samui':['USM','苏梅岛','SEA'],'Denpasar':['DPS','巴厘岛','SEA'],'Bali':['DPS','巴厘岛','SEA'],
+  'Jakarta':['CGK','雅加达','SEA'],'Penang':['PEN','槟城','SEA'],'George Town':['PEN','槟城','SEA'],'Yangon':['RGN','仰光','SEA'],'Krabi':['KBV','甲米','SEA'],'Langkawi':['LGK','兰卡威','SEA'],'Kota Kinabalu':['BKI','亚庇','SEA'],'Cebu':['CEB','宿务','SEA'],'Cebu City':['CEB','宿务','SEA'],'Vientiane':['VTE','万象','SEA'],'Luang Prabang':['LPQ','琅勃拉邦','SEA'],
+  'Hong Kong':['HKG','香港','EA'],'Taipei City':['TPE','台北','EA'],'Taipei':['TPE','台北','EA'],'Macao':['MFM','澳门','EA'],'Tokyo':['TYO','东京','EA'],'Osaka':['OSA','大阪','EA'],'Seoul':['SEL','首尔','EA'],'Hiroshima':['HIJ','广岛','EA'],'Fukuoka':['FUK','福冈','EA'],'Sapporo':['CTS','札幌','EA'],'Busan':['PUS','釜山','EA'],'Okinawa':['OKA','冲绳','EA'],
+  'Shanghai':['PVG','上海','CN'],'Beijing':['PEK','北京','CN'],'Guangzhou':['CAN','广州','CN'],'Shenzhen':['SZX','深圳','CN'],'Chengdu':['CTU','成都','CN'],'Xiamen':['XMN','厦门','CN'],
+  'Mumbai':['BOM','孟买','SA'],'New Delhi':['DEL','新德里','SA'],'Jaipur':['JAI','斋浦尔','SA'],'Goa':['GOI','果阿','SA'],'Bengaluru':['BLR','班加罗尔','SA'],'Chennai':['MAA','金奈','SA'],'Varanasi':['VNS','瓦拉纳西','SA'],'Udaipur':['UDR','乌代布尔','SA'],'Kolkata':['CCU','加尔各答','SA'],'Kochi':['COK','科钦','SA'],'Kathmandu':['KTM','加德满都','SA'],'Hyderabad':['HYD','海得拉巴','SA'],'Jodhpur':['JDH','焦特布尔','SA'],'Colombo':['CMB','科伦坡','SA'],'Ahmedabad':['AMD','艾哈迈达巴德','SA'],'Male':['MLE','马尔代夫','SA'],
+  'Dubai':['DXB','迪拜','SA'],'Abu Dhabi':['AUH','阿布扎比','SA'],'Bahrain':['BAH','巴林','SA'],'Doha':['DOH','多哈','SA'],
+  'London':['LON','伦敦','EU'],'Athens':['ATH','雅典','EU'],'Lisbon':['LIS','里斯本','EU'],'Edinburgh':['EDI','爱丁堡','EU'],'Paris':['PAR','巴黎','EU'],'Dublin':['DUB','都柏林','EU'],'Amsterdam':['AMS','阿姆斯特丹','EU'],'Rome':['ROM','罗马','EU'],'Barcelona':['BCN','巴塞罗那','EU'],'Venice':['VCE','威尼斯','EU'],
+  'Berlin':['BER','柏林','EU'],'Florence':['FLR','佛罗伦萨','EU'],'Prague':['PRG','布拉格','EU'],'Malta':['MLA','马耳他','EU'],'Madrid':['MAD','马德里','EU'],'Vienna':['VIE','维也纳','EU'],'Budapest':['BUD','布达佩斯','EU'],'Santorini':['JTR','圣托里尼','EU'],'Copenhagen':['CPH','哥本哈根','EU'],'Milan':['MIL','米兰','EU'],
+  'Dubrovnik':['DBV','杜布罗夫尼克','EU'],'Munich':['MUC','慕尼黑','EU'],'Stockholm':['STO','斯德哥尔摩','EU'],'Porto':['OPO','波尔图','EU'],'Seville':['SVQ','塞维利亚','EU'],'Mykonos':['JMK','米克诺斯','EU'],'Manchester':['MAN','曼彻斯特','EU'],'Zürich':['ZRH','苏黎世','EU'],'Zurich':['ZRH','苏黎世','EU'],'Naples':['NAP','那不勒斯','EU'],
+  'Reykjavík':['KEF','雷克雅未克','EU'],'Reykjavik':['KEF','雷克雅未克','EU'],'Glasgow':['GLA','格拉斯哥','EU'],'Bordeaux':['BOD','波尔多','EU'],'València':['VLC','瓦伦西亚','EU'],'Valencia':['VLC','瓦伦西亚','EU'],'Oslo':['OSL','奥斯陆','EU'],'Kraków':['KRK','克拉科夫','EU'],'Krakow':['KRK','克拉科夫','EU'],'Nice':['NCE','尼斯','EU'],'Helsinki':['HEL','赫尔辛基','EU'],
+  'Hamburg':['HAM','汉堡','EU'],'Salzburg':['SZG','萨尔茨堡','EU'],'Belfast':['BFS','贝尔法斯特','EU'],'Istanbul':['IST','伊斯坦布尔','EU'],'Frankfurt':['FRA','法兰克福','EU'],'Brussels':['BRU','布鲁塞尔','EU'],'Warsaw':['WAW','华沙','EU'],'Geneva':['GVA','日内瓦','EU'],'Lyon':['LYS','里昂','EU'],'Marseille':['MRS','马赛','EU']
+};
+const DEFAULT_TH = {KUL:110,PEN:120,LGK:150,BKI:150,BKK:200,HKT:170,SGN:170,DAD:220,HAN:230,PQC:210,MNL:210,PNH:240,DPS:230,CGK:200,REP:300,CNX:280,USM:330,KBV:260,CEB:260,RGN:300,HKG:320,TPE:260,MFM:350,TYO:480,OSA:450,SEL:400,CAN:420,
+  ATH:600,VIE:680,MIL:680,ZRH:680,BCN:680,MUC:680,ROM:680,PAR:720,MAD:720,LON:780,AMS:780};
+const REGION_DEFAULT_TH = {SEA:250,EA:450,CN:420,SA:500,EU:720};
+const MONTHS = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+const WINDOW_DAYS = 125; // overridden by settings.windowDays
+const EU_WINDOW_DAYS = 190;
+const BANDS = [140,180,220,270,350,450];
+const isMonthDoc = d => /^\d{4}-\d{2}$/.test(String(d.month||''));
+const isEUDoc = d => d.region === 'Europe';
+function relBand(p, mn, mx){ if(mx<=mn) return 4; return 1 + Math.min(6, Math.floor((p-mn)/(mx-mn)*6.999)); }
+const $ = (s)=>document.querySelector(s);
+
+// ---------- state ----------
+let settings = {thresholds:{}};
+let exploreDocs = [], compareDocs = [], gridDocs = [], alertDocs = [];
+let region = 'SEA', selected = null, CUR = 'SGD', FR = null;
+try{ region = localStorage.getItem('fly.region') || 'SEA'; }catch(e){}
+
+// ---------- helpers ----------
+function cityInfo(name){ const c = CITIES[name]; return c ? {code:c[0], zh:c[1], region:c[2]} : {code:name.slice(0,3).toUpperCase(), zh:name, region:'OTHER'}; }
+function parseDates(s, monthKey){ // "Feb 7 – 15, 2027" | "Nov 16 – 23" | "Dec 28, 2026 – Jan 6, 2027"; monthKey "YYYY-MM" or anything else (e.g. "next-6-months")
+  const parts = s.replace(/ /g,' ').split(/\s[–-]\s/);
+  const a = parts[0].trim(), b = (parts[1]||'').trim();
+  const ma = a.match(/^([A-Z][a-z]{2}) (\d{1,2})(?:, (\d{4}))?/); if(!ma) return null;
+  const mb = b.match(/^(?:([A-Z][a-z]{2}) )?(\d{1,2})(?:, (\d{4}))?/);
+  const yk = (monthKey && /^\d{4}-\d{2}$/.test(monthKey)) ? +monthKey.slice(0,4) : null;
+  let y = ma[3] ? +ma[3] : (mb && mb[3] ? +mb[3] : (yk!=null ? yk : new Date().getFullYear()));
+  if(!ma[3] && mb && mb[3] && mb[1] && MONTHS[mb[1]] < MONTHS[ma[1]]) y = +mb[3]-1; // Dec 28 – Jan 6, 2027
+  let out = new Date(y, MONTHS[ma[1]], +ma[2]);
+  let back = null; if(mb){ const bm = mb[1] ? MONTHS[mb[1]] : MONTHS[ma[1]]; let by = mb[3] ? +mb[3] : y; if(!mb[3] && bm < MONTHS[ma[1]]) by = y+1; back = new Date(by, bm, +mb[2]); }
+  if(yk==null && !ma[3] && !(mb && mb[3])){ // no year anywhere: a date more than a month in the past must mean next year
+    const cutoff = new Date(Date.now()-30*864e5);
+    if(out < cutoff){ out = new Date(out.getFullYear()+1, out.getMonth(), out.getDate()); if(back) back = new Date(back.getFullYear()+1, back.getMonth(), back.getDate()); }
+  }
+  return {out, back};
+}
+function fmtD(d){ return d ? (d.getMonth()+1)+'/'+d.getDate() : ''; }
+function fmtRange(dd){ return dd ? fmtD(dd.out)+' → '+fmtD(dd.back) : ''; }
+function fmtTime(iso){ if(!iso) return '—'; const d = new Date(iso); if(isNaN(d)) return iso; return (d.getMonth()+1)+'月'+d.getDate()+'日 '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function band(p){ let i=0; while(i<BANDS.length && p>BANDS[i]) i++; return i+1; } // 1..7
+function threshold(code, reg){ const t = settings.thresholds||{}; if(t[code]!=null) return +t[code]; if(DEFAULT_TH[code]!=null) return DEFAULT_TH[code]; return REGION_DEFAULT_TH[reg]||300; }
+function percentile(hist, v){ if(!hist.length) return null; const below = hist.filter(x=>x<v).length; const eq = hist.filter(x=>x===v).length; return (below + eq/2)/hist.length; }
+function verdict(price, hist, th){
+  if(price==null) return {level:'na', label:'无数据', reason:''};
+  if(price <= th) return {level:'buy', label:'值得入手', reason:'低于心理价位 '+th};
+  if(hist.length >= 4){
+    const mn = Math.min.apply(null, hist);
+    if(price <= mn*1.02) return {level:'buy', label:'值得入手', reason:'记录以来最低'};
+    const p = percentile(hist, price);
+    if(p <= 0.25) return {level:'good', label:'偏低', reason:'历史最低 25%'};
+    if(p <= 0.60) return {level:'watch', label:'观望', reason:'接近历史中位'};
+    return {level:'wait', label:'等等', reason:'高于历史 60%'};
+  }
+  if(price <= th*1.15) return {level:'good', label:'偏低', reason:'接近心理价位'};
+  return {level:'watch', label:'观望', reason:'数据积累中（'+hist.length+'/4）'};
+}
+function pill(v){ return '<span class="pill '+v.level+'" title="'+esc(v.reason)+'"><i class="dot"></i>'+v.label+'</span>'; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// ---------- derived data ----------
+function runsFromExplore(){ // group explore docs by run id, newest first (each run may hold monthly docs and/or a Europe doc)
+  const m = new Map();
+  exploreDocs.forEach(d=>{ if(!m.has(d.run)) m.set(d.run, {run:d.run, at:d.at, months:[]}); m.get(d.run).months.push(d); });
+  return Array.from(m.values()).sort((a,b)=> (a.at<b.at?1:-1));
+}
+function monthRuns(){ return runsFromExplore().filter(r=>r.months.some(isMonthDoc)); }
+function euRuns(){ return runsFromExplore().filter(r=>r.months.some(isEUDoc)); }
+function bestByDest(docs, windowDays){ // for a set of explore docs: dest code -> best row inside window
+  const now = new Date(); const limit = new Date(now.getTime()+(windowDays||settings.windowDays||WINDOW_DAYS)*864e5);
+  const out = new Map();
+  docs.forEach(md=>{ (md.rows||[]).forEach(r=>{
+    const [city, dates, price, stops, dur] = r; const info = cityInfo(city); const dd = parseDates(dates, md.month); if(!dd) return;
+    if(dd.out < now || dd.out > limit) return;
+    const cur = out.get(info.code);
+    if(!cur || price < cur.price) out.set(info.code, {code:info.code, city, zh:info.zh, region:info.region, price, dates, dd, stops, dur, month:md.month});
+  });});
+  return out;
+}
+function bestForRun(runDoc){ return bestByDest(runDoc.months.filter(isMonthDoc)); }
+function bestForEU(runDoc){ const m = bestByDest(runDoc.months.filter(isEUDoc), EU_WINDOW_DAYS); m.forEach((v,k)=>{ if(v.region!=='EU') m.delete(k); }); return m; }
+function monthTable(runDoc){ // dest -> {month: {price, dates}}
+  const out = new Map(); const months = [];
+  runDoc.months.filter(isMonthDoc).slice().sort((a,b)=>a.month<b.month?-1:1).forEach(md=>{ months.push(md.month); (md.rows||[]).forEach(r=>{ const info = cityInfo(r[0]); if(!out.has(info.code)) out.set(info.code, {code:info.code, zh:info.zh, region:info.region, m:{}}); const e = out.get(info.code); if(!e.m[md.month] || r[2] < e.m[md.month].price) e.m[md.month] = {price:r[2], dates:r[1]}; }); });
+  return {months, table:out};
+}
+function latestCompare(){ return compareDocs.length ? compareDocs[0] : null; }
+function compareHist(code){ return compareDocs.slice().reverse().map(d=>{ const it=(d.items||[]).find(x=>x.code===code); return it ? {at:d.at, run:d.run, trip:it.trip, agoda:it.agoda, google:it.google} : null; }).filter(Boolean); }
+
+// ---------- render ----------
+function render(){
+  const runs = monthRuns(); const eruns = euRuns();
+  const allRuns = runsFromExplore();
+  $('#runCount').textContent = runs.length;
+  $('#lastRun').textContent = allRuns.length ? fmtTime(allRuns[0].at) : '—';
+  if(!runs.length && !eruns.length){ return; }
+  const best = runs.length ? bestForRun(runs[0]) : new Map();
+  if(eruns.length){ bestForEU(eruns[0]).forEach((v,k)=>best.set(k,v)); }
+  const histByDest = new Map();
+  runs.slice().reverse().forEach(r=>{ bestForRun(r).forEach((v,k)=>{ if(v.region==='EU') return; if(!histByDest.has(k)) histByDest.set(k, []); histByDest.get(k).push({at:r.at, price:v.price}); }); });
+  eruns.slice().reverse().forEach(r=>{ bestForEU(r).forEach((v,k)=>{ if(!histByDest.has(k)) histByDest.set(k, []); histByDest.get(k).push({at:r.at, price:v.price}); }); });
+  const cmp = latestCompare(); const cmpItems = new Map(); if(cmp) (cmp.items||[]).forEach(it=>cmpItems.set(it.code, it));
+  // rows
+  const rows = [];
+  best.forEach((b, code)=>{
+    if(FR && code===FR.dest) return; // shown in its own section
+    const hist = (histByDest.get(code)||[]).map(h=>h.price); const histPrev = hist.length>1 ? hist[hist.length-2] : null;
+    const it = cmpItems.get(code); const th = threshold(code, b.region);
+    const cands = [{src:'Google', p:b.price}]; if(it && it.trip!=null) cands.push({src:'Trip', p:it.trip}); if(it && it.agoda!=null) cands.push({src:'Agoda', p:it.agoda});
+    const low = cands.reduce((a,c)=> c.p<a.p?c:a, cands[0]);
+    const v = verdict(low.p, hist.slice(0,-1).concat(hist.length? [hist[hist.length-1]]:[]), th);
+    rows.push({code, b, it, th, low, hist, histPrev, v, pct: hist.length>=4 ? percentile(hist, b.price) : null});
+  });
+  rows.sort((a,b)=>a.low.p-b.low.p);
+  // picks: top 3 (SEA + EA, by lowest price) that are buy/good first
+  const order = {buy:0, good:1, watch:2, wait:3, na:4};
+  const picks = rows.filter(r=>r.b.region!=='EU'&&r.b.region!=='OTHER').slice().sort((a,b)=> (order[a.v.level]-order[b.v.level]) || (a.low.p-b.low.p)).slice(0,3);
+  $('#picks').innerHTML = picks.map(r=>'<div class="pick"><div class="city">'+esc(r.b.zh)+' <span class="code">'+r.code+'</span></div><div class="price">'+r.low.p+'<small>'+CUR+' 往返 · '+r.low.src+'</small></div><div class="when">'+esc(r.it ? (r.it.out.slice(5).replace('-','/')+' → '+r.it.back.slice(5).replace('-','/')) : fmtRange(r.b.dd))+' · '+esc(r.b.stops==='Nonstop'?'直飞':r.b.stops)+'</div><div>'+pill(r.v)+' <span class="muted" style="font-size:11px">'+esc(r.v.reason)+'</span></div></div>').join('') || '<div class="empty">暂无</div>';
+  // board
+  const shown = rows.filter(r=> region==='ALL' ? true : (region==='EA' ? (r.b.region==='EA'||r.b.region==='CN') : r.b.region===region));
+  if(selected && !shown.some(r=>r.code===selected)) selected = null;
+  if(!selected && shown.length) selected = shown[0].code;
+  $('#boardBody').innerHTML = shown.length ? shown.map(r=>{
+    const d = r.histPrev!=null ? r.b.price - r.histPrev : null;
+    const delta = d==null||d===0 ? '' : '<span class="delta '+(d<0?'down':'up')+'">'+(d<0?'↓':'↑')+Math.abs(d)+'</span>';
+    return '<tr class="row" tabindex="0" data-code="'+r.code+'" aria-selected="'+(selected===r.code)+'">'
+      +'<td><span class="city">'+esc(r.b.zh)+'</span><span class="code">'+r.code+'</span></td>'
+      +'<td class="num best">'+r.b.price+delta+'</td>'
+      +'<td><span class="mono">'+esc(r.it ? (r.it.out.slice(5).replace('-','/')+' → '+r.it.back.slice(5).replace('-','/')) : fmtRange(r.b.dd))+'</span> <span class="muted" style="font-size:11px">'+esc(r.b.stops==='Nonstop'?'直飞':r.b.stops)+' · '+esc(r.b.dur)+'</span></td>'
+      +'<td>'+spark(r.hist)+'</td>'
+      +'<td class="num">'+(r.pct==null ? '<span class="muted" title="采集满 4 次后显示">'+r.hist.length+'/4</span>' : Math.round(r.pct*100)+'%<span class="src">分位</span>')+'</td>'
+      +'<td>'+pill(r.v)+'</td>'
+      +'<td class="num"><input class="th" type="number" min="50" step="10" value="'+r.th+'" data-code="'+r.code+'" aria-label="'+esc(r.b.zh)+' 心理价位" title="在 settings.json 里修改" disabled></td>'
+      +'</tr>'; }).join('') : '<tr><td colspan="7"><div class="empty">这个地区暂时没有数据</div></td></tr>';
+  if(runs.length) renderHeat(runs[0]); else $('#heat').innerHTML = '<tbody><tr><td><div class="empty">等待第一次按月采集</div></td></tr></tbody>';
+  renderCNY(FR ? cmpItems.get(FR.dest) : null);
+  renderTrend(rows);
+}
+function spark(hist){
+  if(hist.length<2) return '<span class="muted" style="font-size:11px">'+(hist.length?'首次采集':'')+'</span>';
+  const w=84,h=24,p=3; const mn=Math.min.apply(null,hist), mx=Math.max.apply(null,hist); const rng = mx-mn||1;
+  const pts = hist.map((v,i)=>[p+i*(w-2*p)/(hist.length-1), h-p-(v-mn)/rng*(h-2*p)]);
+  const last = pts[pts.length-1];
+  return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" aria-label="走势"><polyline fill="none" stroke="var(--s1)" stroke-width="1.5" points="'+pts.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ')+'"/><circle cx="'+last[0].toFixed(1)+'" cy="'+last[1].toFixed(1)+'" r="2.5" fill="var(--s1)"/></svg>';
+}
+function renderHeat(latest){
+  if(region==='EU'){ $('#heat').innerHTML = '<tbody><tr><td><div class="empty">欧洲目前只抓「未来 6 个月」的整体最低价，不按月拆分；最便宜的出发日期见上面的价格板。</div></td></tr></tbody>'; return; }
+  const {months, table} = monthTable(latest);
+  const rows = Array.from(table.values()).filter(e=> e.region!=='EU' && !(FR && e.code===FR.dest) && (region==='ALL' ? true : (region==='EA' ? (e.region==='EA'||e.region==='CN') : e.region===region)));
+  rows.forEach(e=>{ e.min = Math.min.apply(null, months.map(m=> e.m[m] ? e.m[m].price : Infinity)); });
+  rows.sort((a,b)=>a.min-b.min);
+  const head = '<tr><th class="rowh"></th>'+months.map(m=>'<th style="text-align:center">'+(+m.slice(5))+' 月<br><span class="muted" style="font-weight:400">'+m.slice(0,4)+'</span></th>').join('')+'</tr>';
+  $('#heat').innerHTML = '<thead>'+head+'</thead><tbody>'+rows.map(e=>'<tr><th class="rowh">'+esc(e.zh)+' <span class="code">'+e.code+'</span></th>'+months.map(m=>{ const c=e.m[m]; if(!c) return '<td><span class="cell">—</span></td>'; const dd=parseDates(c.dates,m); return '<td><span class="cell l'+band(c.price)+(c.price===e.min?' min':'')+'" title="'+esc(c.dates)+'">'+c.price+'<small>'+esc(dd?fmtD(dd.out)+'→'+fmtD(dd.back):'')+'</small></span></td>'; }).join('')+'</tr>').join('')+'</tbody>';
+}
+function mdText(s){ const m = String(s).match(/^([A-Z][a-z]{2}) (\d{1,2})$/); return m ? (MONTHS[m[1]]+1)+'/'+m[2] : s; }
+function renderCNY(cmpCAN){
+  const sec = $('#fixedSec'); if(!FR){ sec.hidden = true; return; } sec.hidden = false;
+  $('#fixedTitle').textContent = FR.label || (FR.dest+' 固定日期');
+  $('#fixedDesc').textContent = FR.note || ('每天查 '+FR.out+' 出发、'+FR.back+' 返程这一组日期的 Google 报价（在 settings.json 的 fixedRoute 里改）');
+  const g = gridDocs.filter(d=>d.dest===FR.dest)[0] || null;
+  if(!g){ $('#cnyGrid').innerHTML=''; $('#cnySide').innerHTML='<div class="empty" style="flex:1">等待第一次采集</div>'; $('#cnyNote').innerHTML=''; return; }
+  const cells = g.cells||[]; const outs=[], backs=[]; cells.forEach(c=>{ if(!outs.includes(c[0])) outs.push(c[0]); if(!backs.includes(c[1])) backs.push(c[1]); });
+  const mn = Math.min.apply(null, cells.map(c=>c[2])); const mx = Math.max.apply(null, cells.map(c=>c[2])); const minCell = cells.find(c=>c[2]===mn);
+  const th = threshold(FR.dest, (Object.values(CITIES).find(c=>c[0]===FR.dest)||[])[2]||'OTHER');
+  const gHist = gridDocs.filter(d=>d.dest===FR.dest).reverse().map(d=> Math.min.apply(null,(d.cells||[]).map(c=>c[2])));
+  const cands = [{src:'Google', p:mn}]; if(cmpCAN&&cmpCAN.trip!=null) cands.push({src:'Trip', p:cmpCAN.trip}); if(cmpCAN&&cmpCAN.agoda!=null) cands.push({src:'Agoda', p:cmpCAN.agoda});
+  const low = cands.reduce((a,c)=>c.p<a.p?c:a, cands[0]);
+  const v = verdict(low.p, gHist, th);
+  $('#cnySide').innerHTML = '<div class="kv"><span class="k">最低（'+esc(minCell[0])+' → '+esc(minCell[1])+'）</span><span class="v">'+low.p+'<small>'+CUR+' · '+low.src+'</small></span></div>'
+    +'<div class="kv"><span class="k">建议（心理价位 '+th+'）</span><span class="v" style="font-family:var(--font-ui);font-size:14px">'+pill(v)+' <span class="muted" style="font-weight:400;font-size:12px">'+esc(v.reason)+'</span></span></div>'
+    +'<div class="kv"><span class="k">Google 价格判断</span><span class="v" style="font-family:var(--font-ui);font-size:14px;font-weight:500">'+esc(g.insight||'—')+'</span></div>';
+  let html = '<div class="h">返程 ↓ / 出发 →</div>'+outs.map(o=>'<div class="h">'+esc(mdText(o))+'</div>').join('');
+  backs.forEach(b=>{ html += '<div class="rh">'+esc(mdText(b))+'</div>'; outs.forEach(o=>{ const c = cells.find(x=>x[0]===o&&x[1]===b); html += c ? '<div class="c l'+relBand(c[2],mn,mx)+(c[2]===mn?' min':'')+'" title="'+esc(o)+' → '+esc(b)+'">'+c[2]+'</div>' : '<div class="c">—</div>'; }); });
+  $('#cnyGrid').innerHTML = html;
+  $('#cnyNote').innerHTML = '<span>Google Flights 报价，采集于 '+fmtTime(g.at)+' · 颜色按这张表内的高低相对着色（'+mn+' 到 '+mx+'）</span>';
+}
+function renderTrend(rows){
+  const box = $('#chartbox'); const tip = $('#tip');
+  const r = rows.find(x=>x.code===selected);
+  $('#trendTitle').textContent = r ? '价格走势 · '+r.b.zh+' '+r.code : '价格走势';
+  if(!r){ box.innerHTML = '<div class="empty">点上面的某个目的地查看走势</div><div class="tip" id="tip" hidden></div>'; $('#trendLegend').innerHTML=''; return; }
+  const isEU = r.b.region==='EU';
+  const runs = (isEU ? euRuns() : monthRuns()).slice().reverse();
+  const gSeries = []; runs.forEach(run=>{ const b = (isEU ? bestForEU(run) : bestForRun(run)).get(r.code); if(b) gSeries.push({t:new Date(run.at), v:b.price}); });
+  const ch = compareHist(r.code);
+  const tSeries = ch.filter(x=>x.trip!=null).map(x=>({t:new Date(x.at), v:x.trip}));
+  const aSeries = ch.filter(x=>x.agoda!=null).map(x=>({t:new Date(x.at), v:x.agoda}));
+  const series = [{name:'Google 最低',cls:'s1',pts:gSeries},{name:'Trip.com',cls:'s2',pts:tSeries},{name:'Agoda',cls:'s3',pts:aSeries}].filter(s=>s.pts.length);
+  const all = series.flatMap(s=>s.pts); if(!all.length){ box.innerHTML='<div class="empty">暂无数据</div><div class="tip" id="tip" hidden></div>'; return; }
+  const W = Math.max(320, box.clientWidth||600), H = 220, L=48, R=16, T=14, B=30;
+  const ts = all.map(p=>p.t.getTime()); let t0=Math.min.apply(null,ts), t1=Math.max.apply(null,ts); if(t0===t1){ t0-=12*36e5; t1+=12*36e5; }
+  const vs = all.map(p=>p.v); let v0=Math.min.apply(null,vs), v1=Math.max.apply(null,vs); const pad=Math.max(10,(v1-v0)*0.2); v0=Math.max(0,Math.floor((v0-pad)/10)*10); v1=Math.ceil((v1+pad)/10)*10; if(v1===v0) v1=v0+50;
+  const x = t=> L + (t-t0)/(t1-t0)*(W-L-R); const y = v=> T + (1-(v-v0)/(v1-v0))*(H-T-B);
+  const th = r.th;
+  let svg = '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(r.b.zh)+' 价格走势">';
+  const ticks = 4; for(let i=0;i<=ticks;i++){ const v = v0+(v1-v0)*i/ticks; svg += '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'" stroke="var(--grid)" stroke-width="1"/><text x="'+(L-6)+'" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--font-data)">'+Math.round(v)+'</text>'; }
+  if(th>=v0 && th<=v1) svg += '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(th).toFixed(1)+'" y2="'+y(th).toFixed(1)+'" stroke="var(--fg2)" stroke-dasharray="4 4" stroke-width="1"/><text x="'+(W-R)+'" y="'+(y(th)-4).toFixed(1)+'" text-anchor="end" font-size="11" fill="var(--fg2)">心理价位 '+th+'</text>';
+  svg += '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="var(--axis)"/>';
+  const xt = Math.min(6, Math.max(2, Math.round((t1-t0)/864e5))); for(let i=0;i<=xt;i++){ const t = t0+(t1-t0)*i/xt; const d = new Date(t); svg += '<text x="'+x(t).toFixed(1)+'" y="'+(H-B+16)+'" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--font-data)">'+(d.getMonth()+1)+'/'+d.getDate()+'</text>'; }
+  const ends = [];
+  series.forEach(s=>{ const pts = s.pts.map(p=>[x(p.t.getTime()), y(p.v)]); if(pts.length>1) svg += '<polyline fill="none" stroke="var(--'+s.cls+')" stroke-width="2" stroke-linejoin="round" points="'+pts.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ')+'"/>'; pts.forEach((q,i)=>{ svg += '<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="'+(i===pts.length-1?4.5:3)+'" fill="var(--'+s.cls+')" stroke="var(--panel)" stroke-width="2"/>'; }); const lastP = pts[pts.length-1]; ends.push({x:lastP[0], y:lastP[1], v:s.pts[s.pts.length-1].v}); });
+  ends.sort((a,b)=>a.y-b.y); for(let i=1;i<ends.length;i++){ if(ends[i].y-ends[i-1].y<13) ends[i].y = ends[i-1].y+13; }
+  ends.forEach(e=>{ svg += '<text x="'+(e.x+8).toFixed(1)+'" y="'+(e.y+4).toFixed(1)+'" font-size="11" fill="var(--fg2)" font-family="var(--font-data)">'+e.v+'</text>'; });
+  svg += '<rect id="hit" x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'" fill="transparent"/>';
+  svg += '</svg>';
+  box.innerHTML = svg + '<div class="tip" id="tip" hidden></div>';
+  if(all.length===1) box.insertAdjacentHTML('beforeend','<p class="muted" style="font-size:12px;margin:6px 0 0">目前只有 1 次采集。自动采集每天 1 次，几天后这里会出现走势线。</p>');
+  $('#trendLegend').innerHTML = series.map(s=>'<span><i class="sw '+s.cls+'"></i>'+s.name+'</span>').join('') + '<span><i class="sw" style="border-top:1px dashed var(--fg2);height:0"></i>心理价位</span>';
+  const hit = box.querySelector('#hit'); const tipEl = box.querySelector('#tip');
+  function onMove(ev){ const rect = box.getBoundingClientRect(); const px = (ev.clientX - rect.left) * (W/rect.width); let bestP=null, bestD=1e9, bestS=null; series.forEach(s=>s.pts.forEach(p=>{ const d=Math.abs(x(p.t.getTime())-px); if(d<bestD){bestD=d;bestP=p;bestS=s;} })); if(!bestP||bestD>40){ tipEl.hidden=true; return; } const sameT = series.map(s=>{ const p = s.pts.find(q=>Math.abs(q.t-bestP.t)<36e5); return p ? '<div><i class="sw '+s.cls+'" style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:var(--'+s.cls+')"></i>'+s.name+' <b>'+p.v+'</b></div>' : ''; }).join(''); tipEl.innerHTML = '<div class="muted">'+fmtTime(bestP.t.toISOString())+'</div>'+sameT; tipEl.hidden=false; const tx = Math.min(rect.width-150, Math.max(0, (ev.clientX-rect.left)+12)); tipEl.style.left = tx+'px'; tipEl.style.top = Math.max(0,(ev.clientY-rect.top)-10)+'px'; }
+  hit.addEventListener('mousemove', onMove); hit.addEventListener('mouseleave', ()=>{ tipEl.hidden=true; });
+  hit.addEventListener('touchstart', (e)=>{ if(e.touches[0]) onMove(e.touches[0]); }, {passive:true});
+}
+function renderAlerts(){
+  const ul = $('#alerts'); if(!alertDocs.length){ ul.innerHTML='<li class="muted">还没有提醒</li>'; return; }
+  ul.innerHTML = alertDocs.slice(0,15).map(a=>'<li><time>'+fmtTime(a.at)+'</time><span>'+esc(a.text)+'</span></li>').join('');
+}
+
+// ---------- events ----------
+document.querySelectorAll('.chip[data-region]').forEach(btn=>{ btn.setAttribute('aria-pressed', String(btn.dataset.region===region)); btn.addEventListener('click', ()=>{ region = btn.dataset.region; document.querySelectorAll('.chip[data-region]').forEach(b=>b.setAttribute('aria-pressed', String(b===btn))); try{ localStorage.setItem('fly.region', region);}catch(e){} selected=null; render(); }); });
+$('#boardBody').addEventListener('click', (e)=>{ if(e.target.closest('input')) return; const tr = e.target.closest('tr.row'); if(!tr) return; selected = tr.dataset.code; render(); });
+$('#boardBody').addEventListener('keydown', (e)=>{ if(e.key==='Enter' && e.target.classList.contains('row')){ selected = e.target.dataset.code; render(); } });
+let noteTimer=null; function note(text, ms){ const n=$('#note'); n.textContent=text; n.hidden=false; clearTimeout(noteTimer); if(ms) noteTimer=setTimeout(()=>{n.hidden=true;}, ms); }
+
+// ---------- data ----------
+async function boot(){
+  // data/bundle.json is rebuilt by build_bundle.py after every collection (see .github/workflows/collect.yml)
+  try{
+    const res = await fetch('data/bundle.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const b = await res.json();
+    settings = b.settings || {}; if(!settings.thresholds) settings.thresholds = {};
+    CUR = settings.currency || 'SGD'; FR = settings.fixedRoute || null;
+    $('#eyebrow').textContent = (settings.originName || settings.origin || 'SIN')+'出发 · 往返经济舱 · 1 人 · '+CUR;
+    document.title = (settings.title || '飞哪儿便宜');
+    $('#windowDays').textContent = Math.round((settings.windowDays||WINDOW_DAYS)/30)+' 个月';
+    exploreDocs = b.explore||[]; compareDocs = b.compare||[]; gridDocs = b.grid||[]; alertDocs = b.alerts||[];
+    render(); renderAlerts();
+    if(!exploreDocs.length) note('还没有数据。第一次 GitHub Actions 采集跑完后刷新这里。');
+  }catch(e){ note('读取 data/bundle.json 失败：'+e.message+'。仓库刚建好的话，等第一次采集跑完（Actions → collect）再看。'); }
+}
+boot();
+let rz=null; window.addEventListener('resize', ()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(exploreDocs.length) render(); }, 150); });
+})();
+</script>
+</body>
+</html>
