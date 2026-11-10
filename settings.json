@@ -1,6 +1,7 @@
 {
   "_comment": "我自己的实例：新加坡出发，另查春节广州。字段说明见 fly-cheap 模板仓库的 README。",
   "title": "飞哪儿便宜",
+  "greeting": "鸭嘴兽祝您旅行愉快",
   "origin": "SIN",
   "originName": "新加坡",
   "currency": "SGD",
@@ -19,7 +20,15 @@
     "note": "2027 年春节是 2 月 6 日（周六）。每天查 2/6 出发、2/11 返程这一组日期的 Google 报价。"
   },
   "thresholds": {
-    "KUL": 110, "BKK": 200, "HKT": 170, "SGN": 170, "DAD": 220, "HAN": 230,
-    "PQC": 210, "MNL": 210, "PNH": 240, "CAN": 420
+    "KUL": 110,
+    "BKK": 200,
+    "HKT": 170,
+    "SGN": 170,
+    "DAD": 220,
+    "HAN": 230,
+    "PQC": 210,
+    "MNL": 210,
+    "PNH": 240,
+    "CAN": 420
   }
 }
