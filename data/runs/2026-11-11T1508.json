@@ -1,0 +1,10 @@
+{
+ "run": "2026-11-11T1508",
+ "at": "2026-11-11T07:08:42Z",
+ "origin": "SIN",
+ "status": "ok",
+ "sources": [
+  "google(serpapi)"
+ ],
+ "note": "5 months + Europe 43 cities + CAN via SerpApi"
+}
