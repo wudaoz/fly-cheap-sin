@@ -1,0 +1,10 @@
+{
+ "run": "2026-11-16T1517",
+ "at": "2026-11-16T07:17:23Z",
+ "origin": "SIN",
+ "status": "partial",
+ "sources": [
+  "google(serpapi)"
+ ],
+ "note": "explore 2027-02 empty"
+}
