@@ -1,0 +1,10 @@
+{
+ "run": "2026-11-27T1705",
+ "at": "2026-11-27T09:05:19Z",
+ "origin": "SIN",
+ "status": "partial",
+ "sources": [
+  "google(serpapi)"
+ ],
+ "note": "europe explore failed/empty"
+}
